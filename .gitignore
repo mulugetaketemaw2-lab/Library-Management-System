@@ -1,0 +1,14 @@
+# Root gitignore
+node_modules/
+.env
+
+# Subfolders dependencies
+n-backend/node_modules/
+n-frontend/node_modules/
+
+# Subfolders builds
+n-frontend/build/
+n-frontend/dist/
+
+# Logs
+*.log

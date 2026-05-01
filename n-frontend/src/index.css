@@ -1,0 +1,114 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-sidebar: #0f172a;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --primary: #2563eb;
+    --primary-glow: rgba(37, 99, 235, 0.1);
+  }
+
+  .dark {
+    /* Premium Indigo Night Theme - Softer and more customized */
+    --bg-main: #0f172a;     /* Slate 900 - Lighter and more vibrant than black */
+    --bg-card: #1e293b;     /* Slate 800 - Good contrast for cards */
+    --bg-sidebar: #020617;  /* Slate 950 - Deepest for contrast */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --primary: #3b82f6;
+    --primary-glow: rgba(59, 130, 246, 0.2);
+  }
+
+  body {
+    @apply font-inter antialiased transition-colors duration-500;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-outfit font-bold transition-colors duration-500;
+    color: var(--text-main);
+  }
+}
+
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl border transition-all duration-500;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-color: rgba(255, 255, 255, 0.3);
+    @apply dark:bg-slate-900/60 dark:border-white/10;
+  }
+  
+  .card-premium {
+    @apply rounded-[2.5rem] p-8 shadow-xl transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    @apply dark:shadow-black/20;
+  }
+  
+  .btn-premium {
+    @apply px-6 py-3.5 rounded-2xl font-bold text-sm cursor-pointer transition-all duration-500 flex items-center justify-center gap-3 border-none disabled:opacity-50;
+  }
+  
+  .btn-primary-premium {
+    @apply bg-primary text-white hover:bg-blue-700 hover:shadow-2xl hover:shadow-primary/40;
+    background-color: var(--primary);
+  }
+  
+  .btn-secondary-premium {
+    @apply bg-slate-100 text-slate-900 border-none hover:bg-slate-200;
+    @apply dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700;
+  }
+
+  .input-premium {
+    @apply w-full px-6 py-4 rounded-2xl border font-medium outline-none transition-all duration-500 focus:ring-4 focus:ring-primary/10;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-color: var(--border);
+    color: var(--text-main);
+    @apply dark:bg-slate-800/40 dark:focus:border-primary;
+  }
+
+  .table-wrap {
+    @apply rounded-[2.5rem] shadow-xl overflow-hidden transition-all duration-500;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+  }
+
+  .badge-premium {
+    @apply inline-block px-4 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-[0.15em] transition-all duration-500;
+  }
+}
+
+/* Specific Dark Mode Visibility Fixes */
+.dark .text-slate-500 { color: var(--text-muted); }
+.dark .text-slate-400 { color: var(--text-muted); }
+.dark .text-slate-900 { color: var(--text-main); }
+.dark .bg-slate-50 { background-color: var(--bg-main); }
+.dark .bg-white { background-color: var(--bg-card); }
+.dark .border-slate-200 { border-color: var(--border); }
+.dark .border-slate-100 { border-color: var(--border); }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-slate-300;
+  @apply dark:bg-slate-800 dark:hover:bg-slate-700;
+}
+
+/* Animations */
+.animate-premium {
+  @apply transition-all duration-500 ease-out;
+}
