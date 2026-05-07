@@ -20,11 +20,11 @@ async function seedDefaults() {
   const User = require('./models/User');
 
   // Seed admin
-  const adminExists = await User.findOne({ username: 'mar' });
+  const adminExists = await User.findOne({ role: 'admin' });
   if (!adminExists) {
-    const hash = await bcrypt.hash('2121', 10);
-    await User.create({ name: 'Super Admin', username: 'mar', password: hash, role: 'admin', approved: true });
-    console.log('Admin created  →  username: mar / password: 2121');
+    const hash = await bcrypt.hash('13118', 10);
+    await User.create({ name: 'Super Admin', username: 'mule', password: hash, role: 'admin', approved: true });
+    console.log('Admin created  →  username: mule / password: 13118');
   }
 
   // Seed librarian
