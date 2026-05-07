@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import API from "../api";
 
 const t = {
-  en: { title:"Library System", subtitle:"Sign in to continue", username:"Username", password:"Password", role:"Role", admin:"Admin", manager:"Librarian", member:"Member", signin:"Sign In", signing:"Signing in...", noAccount:"Don't have an account?", register:"Register here", forgot: "Forgot Password?" },
-  am: { title:"የቤተ መጻሕፍት ሥርዓት", subtitle:"ለመቀጠል ይግቡ", username:"የተጠቃሚ ስም", password:"የይለፍ ቃል", role:"ሚና", admin:"አድሚን", manager:"አስጠቃሚ", member:"አባል", signin:"ግባ", signing:"በመግባት ላይ...", noAccount:"መለያ የለዎትም?", register:"እዚህ ይመዝገቡ", forgot: "የይለፍ ቃል ረስተዋል?" },
+  en: { title:"Library System", subtitle:"Sign in to continue", username:"Username", password:"Password", role:"Role", admin:"Admin", librarianLabel:"Librarian", member:"Member", signin:"Sign In", signing:"Signing in...", noAccount:"Don't have an account?", register:"Register here", forgot: "Forgot Password?" },
+  am: { title:"የቤተ መጻሕፍት ሥርዓት", subtitle:"ለመቀጠል ይግቡ", username:"የተጠቃሚ ስም", password:"የይለፍ ቃል", role:"ሚና", admin:"አድሚን", librarianLabel:"አስጠቃሚ", member:"አባል", signin:"ግባ", signing:"በመግባት ላይ...", noAccount:"መለያ የለዎትም?", register:"እዚህ ይመዝገቡ", forgot: "የይለፍ ቃል ረስተዋል?" },
 };
 
 export default function Login({ onLogin, onSwitch, lang, setLang }) {
@@ -146,7 +146,7 @@ export default function Login({ onLogin, onSwitch, lang, setLang }) {
                   className="w-full h-14 px-6 rounded-2xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 font-medium cursor-pointer appearance-none shadow-sm"
                 >
                   <option value="admin">{T.admin}</option>
-                  <option value="librarian">{T.manager}</option>
+                  <option value="librarian">{T.librarianLabel}</option>
                   <option value="student">{T.member}</option>
                 </select>
               </div>
