@@ -5,7 +5,9 @@ const t = {
   en: {
     title: "Register New Member",
     subtitle: "Create your library account",
-    fullName: "Full Name",
+    firstName: "First Name",
+    fatherName: "Father's Name",
+    grandfatherName: "Grandfather's Name",
     username: "Username",
     email: "Email",
     password: "Password",
@@ -23,7 +25,9 @@ const t = {
   am: {
     title: "አዲስ አባል ይመዝገቡ",
     subtitle: "የቤተ መጻሕፍት መለያዎን ይፍጠሩ",
-    fullName: "ሙሉ ስም",
+    firstName: "ስም",
+    fatherName: "የአባት ስም",
+    grandfatherName: "የአያት ስም",
     username: "የተጠቃሚ ስም",
     email: "ኢሜይል",
     password: "የይለፍ ቃል",
@@ -42,7 +46,9 @@ const t = {
 
 export default function Register({ onSwitch, lang, setLang }) {
   const [form, setForm] = useState({
-    fullName: "",
+    firstName: "",
+    fatherName: "",
+    grandfatherName: "",
     username: "",
     email: "",
     password: "",
@@ -62,14 +68,16 @@ export default function Register({ onSwitch, lang, setLang }) {
     setSuccess("");
     setLoading(true);
 
+    const fullName = [form.firstName, form.fatherName, form.grandfatherName].filter(Boolean).join(" ");
+
     try {
-      await API.post("/auth/register", form, {
+      await API.post("/auth/register", { ...form, fullName }, {
         headers: { "Content-Type": "application/json" },
       });
       setSuccess(lang === "en" 
         ? "Registration successful! Please wait for admin approval before logging in." 
         : "ምዝገባ ተሳክቷል! ከመግባትዎ በፊት የአድሚን ማጽደቂያ ይጠብቁ።");
-      setForm({ fullName: "", username: "", email: "", password: "", address: "" });
+      setForm({ firstName: "", fatherName: "", grandfatherName: "", username: "", email: "", password: "", address: "" });
     } catch (err) {
       const msg = err.response?.data?.message || "";
       if (msg.toLowerCase().includes("all fields")) {
@@ -130,17 +138,43 @@ export default function Register({ onSwitch, lang, setLang }) {
         {success && <div className="alert alert-success" style={{ borderRadius: "12px", marginBottom: "24px", textAlign: "center" }}>{success}</div>}
 
         <form onSubmit={submit}>
-          <div className="form-group" style={{ marginBottom: "16px" }}>
-            <label style={{ display: "block", marginBottom: "8px", fontSize: "13px", fontWeight: 700, color: "var(--text-main)" }}>{T.fullName}</label>
-            <input
-              name="fullName"
-              className="input-focus"
-              value={form.fullName}
-              onChange={handle}
-              required
-              placeholder={lang === "en" ? "John Doe" : "ሙሉ ስም"}
-              style={inputStyle}
-            />
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", marginBottom: "16px" }}>
+            <div className="form-group">
+              <label style={{ display: "block", marginBottom: "8px", fontSize: "13px", fontWeight: 700, color: "var(--text-main)" }}>{T.firstName}</label>
+              <input
+                name="firstName"
+                className="input-focus"
+                value={form.firstName}
+                onChange={handle}
+                required
+                placeholder={lang === "en" ? "John" : "ስም"}
+                style={inputStyle}
+              />
+            </div>
+            <div className="form-group">
+              <label style={{ display: "block", marginBottom: "8px", fontSize: "13px", fontWeight: 700, color: "var(--text-main)" }}>{T.fatherName}</label>
+              <input
+                name="fatherName"
+                className="input-focus"
+                value={form.fatherName}
+                onChange={handle}
+                required
+                placeholder={lang === "en" ? "Smith" : "የአባት"}
+                style={inputStyle}
+              />
+            </div>
+            <div className="form-group">
+              <label style={{ display: "block", marginBottom: "8px", fontSize: "13px", fontWeight: 700, color: "var(--text-main)" }}>{T.grandfatherName}</label>
+              <input
+                name="grandfatherName"
+                className="input-focus"
+                value={form.grandfatherName}
+                onChange={handle}
+                required
+                placeholder={lang === "en" ? "Doe" : "የአያት"}
+                style={inputStyle}
+              />
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>

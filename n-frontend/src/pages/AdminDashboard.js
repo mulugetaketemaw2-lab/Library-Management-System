@@ -20,6 +20,9 @@ const t = {
     addLibrarian: "Add Librarian",
     addMember: "Add Member",
     fullName: "Full Name",
+    firstName: "First Name",
+    fatherName: "Father's Name",
+    grandfatherName: "Grandfather's Name",
     newUsername: "Username",
     password: "Password",
     add: "Add",
@@ -72,6 +75,9 @@ const t = {
     addLibrarian: "ላይብረሪያን ጨምር",
     addMember: "አባል ጨምር",
     fullName: "ሙሉ ስም",
+    firstName: "ስም",
+    fatherName: "የአባት ስም",
+    grandfatherName: "የአያት ስም",
     newUsername: "የተጠቃሚ ስም",
     password: "ፓስዎርድ",
     add: "ጨምር",
@@ -114,12 +120,11 @@ export default function AdminDashboard({ lang, setLang }) {
   const [currentTab, setCurrentTab] = useState("rules"); 
   const [msg, setMsg] = useState({ text: "", type: "" });
   const [showAdd, setShowAdd] = useState(null);
-  const [addForm, setAddForm] = useState({ name: "", username: "", password: "", email: "", address: "" });
+  const [addForm, setAddForm] = useState({ firstName: "", fatherName: "", grandfatherName: "", username: "", password: "", email: "", address: "" });
   const [resetModal, setResetModal] = useState(null);
   const [newPw, setNewPw] = useState("");
   const [editModal, setEditModal] = useState(null);
-  const [detailModal, setDetailModal] = useState(null);
-  const [editForm, setEditForm] = useState({ name: "", username: "", email: "", address: "" });
+  const [editForm, setEditForm] = useState({ firstName: "", fatherName: "", grandfatherName: "", username: "", email: "", address: "" });
   const [rules, setRules] = useState({ maxBorrowDays: 7, fineRate: 5 });
   const [showGlobalMenu, setShowGlobalMenu] = useState(false);
   const T = t[lang];
@@ -158,14 +163,22 @@ export default function AdminDashboard({ lang, setLang }) {
 
   const handleAdd = (role) => {
     setShowAdd(role);
-    setAddForm({ name: "", username: "", password: "", email: "", address: "" });
+    setAddForm({ firstName: "", fatherName: "", grandfatherName: "", username: "", password: "", email: "", address: "" });
   };
 
   const handleEdit = () => {
     if (selected.length !== 1) return flash(T.selectOne, "error");
     const user = users.find(u => u.id === selected[0]);
     setEditModal(user);
-    setEditForm({ name: user.name, username: user.username, email: user.email || "", address: user.address || "" });
+    const names = (user.name || "").split(" ");
+    setEditForm({ 
+      firstName: names[0] || "", 
+      fatherName: names[1] || "", 
+      grandfatherName: names.slice(2).join(" ") || "", 
+      username: user.username, 
+      email: user.email || "", 
+      address: user.address || "" 
+    });
   };
 
   const handleViewDetail = () => {
@@ -215,8 +228,9 @@ export default function AdminDashboard({ lang, setLang }) {
   const addUser = async (e) => {
     e.preventDefault();
     const endpoint = showAdd === "librarian" ? "/admin/librarian" : "/admin/member";
+    const name = [addForm.firstName, addForm.fatherName, addForm.grandfatherName].filter(Boolean).join(" ");
     try {
-      const res = await API.post(endpoint, addForm);
+      const res = await API.post(endpoint, { ...addForm, name });
       flash(res.data.message);
       setShowAdd(null);
       load();
@@ -224,8 +238,9 @@ export default function AdminDashboard({ lang, setLang }) {
   };
 
   const saveEdit = async () => {
+    const name = [editForm.firstName, editForm.fatherName, editForm.grandfatherName].filter(Boolean).join(" ");
     try {
-      await API.put(`/admin/users/${editModal.id}`, editForm);
+      await API.put(`/admin/users/${editModal.id}`, { ...editForm, name });
       flash(lang === "en" ? "User updated" : "ተጠቃሚ ተዘምኗል");
       setEditModal(null);
       setSelected([]);
@@ -529,9 +544,19 @@ export default function AdminDashboard({ lang, setLang }) {
               <button onClick={() => setShowAdd(null)} className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 transition-colors">✕</button>
             </div>
             <form onSubmit={addUser} className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.fullName}</label>
-                <input value={addForm.name} onChange={e => setAddForm({ ...addForm, name: e.target.value })} required className="input-premium" />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.firstName}</label>
+                  <input value={addForm.firstName} onChange={e => setAddForm({ ...addForm, firstName: e.target.value })} required className="input-premium" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.fatherName}</label>
+                  <input value={addForm.fatherName} onChange={e => setAddForm({ ...addForm, fatherName: e.target.value })} required className="input-premium" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.grandfatherName}</label>
+                  <input value={addForm.grandfatherName} onChange={e => setAddForm({ ...addForm, grandfatherName: e.target.value })} required className="input-premium" />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -574,9 +599,19 @@ export default function AdminDashboard({ lang, setLang }) {
               <button onClick={() => setEditModal(null)} className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-500 transition-colors">✕</button>
             </div>
             <div className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.fullName}</label>
-                <input value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} className="input-premium" />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" }}>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.firstName}</label>
+                  <input value={editForm.firstName} onChange={e => setEditForm({ ...editForm, firstName: e.target.value })} required className="input-premium" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.fatherName}</label>
+                  <input value={editForm.fatherName} onChange={e => setEditForm({ ...editForm, fatherName: e.target.value })} required className="input-premium" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.grandfatherName}</label>
+                  <input value={editForm.grandfatherName} onChange={e => setEditForm({ ...editForm, grandfatherName: e.target.value })} required className="input-premium" />
+                </div>
               </div>
               <div className="space-y-2">
                 <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">{T.username}</label>
