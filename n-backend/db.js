@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt   = require('bcryptjs');
 require('dotenv').config();
 
+if (!process.env.MONGO_URI) {
+  console.error('FATAL ERROR: MONGO_URI is not defined in environment variables.');
+  process.exit(1);
+}
+
 mongoose.connect(process.env.MONGO_URI, { tlsInsecure: true })
   .then(async () => {
     console.log('MongoDB Atlas connected');

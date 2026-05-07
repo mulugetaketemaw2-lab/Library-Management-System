@@ -77,15 +77,17 @@ const Layout = ({ children, lang, setLang }) => {
 
   const navigate = useNavigate();
 
-  if (!user) return <Navigate to="/login" />;
+  // Handle access control: redirect to login if not logged in, UNLESS it's the public books page
+  const isPublicRoute = window.location.pathname === "/books";
+  if (!user && !isPublicRoute) return <Navigate to="/login" />;
 
   const logout = () => {
     localStorage.removeItem("user");
     navigate("/login");
   };
 
-  const isAdmin = user.role === "admin";
-  const isLibrarian = user.role === "librarian";
+  const isAdmin = user?.role === "admin";
+  const isLibrarian = user?.role === "librarian";
 
   const linkClass = ({ isActive }) => 
     `flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all duration-300 font-bold text-sm ${
@@ -129,7 +131,7 @@ const Layout = ({ children, lang, setLang }) => {
               </>
             )}
 
-            {(!isAdmin && !isLibrarian) && (
+            {(!isAdmin && !isLibrarian && user) && (
               <>
                 <NavLink to="/my-reservations" className={linkClass}>⏳ {T.reservations}</NavLink>
                 <NavLink to="/loan-history" className={linkClass}>📜 {T.loan}</NavLink>
@@ -152,7 +154,7 @@ const Layout = ({ children, lang, setLang }) => {
           
           <div className="flex-1 hidden md:flex items-center gap-3 pl-4 animate-in fade-in slide-in-from-left-4 duration-700">
             <h4 className="text-[11px] font-black text-primary/80 uppercase tracking-[0.2em] bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 shadow-sm shadow-primary/5">{T.welcome}</h4>
-            <h1 className="text-xl font-outfit font-extrabold bg-gradient-to-br from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent tracking-tight">{user.name}</h1>
+            <h1 className="text-xl font-outfit font-extrabold bg-gradient-to-br from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent tracking-tight">{user?.name || "Guest"}</h1>
           </div>
           <div className="flex-1 md:hidden" />
           
@@ -177,8 +179,8 @@ const Layout = ({ children, lang, setLang }) => {
                 className="flex items-center gap-3 p-1.5 rounded-2xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
               >
                 <div className="hidden sm:block text-right px-2">
-                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-none">{user.name}</p>
-                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mt-1">{user.role}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-none">{user?.name || "Guest"}</p>
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mt-1">{user?.role || "Guest"}</p>
                 </div>
                 <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-xl shadow-inner border border-white dark:border-slate-700">
                   👤
@@ -189,8 +191,8 @@ const Layout = ({ children, lang, setLang }) => {
                 <div className="absolute right-0 mt-3 w-52 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 py-3 z-50 animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                   <div className="px-5 py-3 border-b border-slate-50 dark:border-slate-800 mb-1">
                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">{T.welcome}</p>
-                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">{user.name}</p>
-                    <p className="text-[10px] font-extrabold text-primary uppercase tracking-wider mt-0.5">{user.role}</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">{user?.name || "Guest"}</p>
+                    <p className="text-[10px] font-extrabold text-primary uppercase tracking-wider mt-0.5">{user?.role || "Guest"}</p>
                   </div>
                   <div className="px-4">
                     <button 
@@ -239,7 +241,7 @@ function AppRoutes({ lang, setLang }) {
       <Route path="/reset-password/:token" element={<ResetPassword lang={lang} />} />
 
       {/* Public Route for Guests and Members */}
-      <Route path="/books" element={<Books lang={lang} setLang={setLang} />} />
+      <Route path="/books" element={wrap(<Books />)} />
       <Route path="/books/:id" element={wrap(<BookDetail />)} />
       
       <Route path="/" element={wrap(<Dashboard />)} />

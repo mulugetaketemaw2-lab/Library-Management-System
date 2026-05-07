@@ -13,9 +13,12 @@ router.post('/login', async (req, res) => {
     return res.status(400).json({ message: 'All fields required' });
 
   try {
+    // Escape special characters in username for safe RegExp
+    const escapedUsername = username.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    
     // Case-insensitive username lookup
     const user = await User.findOne({ 
-      username: { $regex: new RegExp(`^${username}$`, 'i') }, 
+      username: { $regex: new RegExp(`^${escapedUsername}$`, 'i') }, 
       role 
     });
     
@@ -30,14 +33,20 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: 'Invalid credentials' });
 
+    if (!process.env.JWT_SECRET) {
+      console.error('FATAL ERROR: JWT_SECRET is not defined in environment variables.');
+      return res.status(500).json({ message: 'Server configuration error: JWT_SECRET missing' });
+    }
+
     const token = jwt.sign(
-      { id: user._id, name: user.name, username: user.username, role: user.role },
+      { id: user._id.toString(), name: user.name, username: user.username, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
     );
     res.json({ token, user: { id: user._id, name: user.name, username: user.username, role: user.role } });
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Login Error:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
