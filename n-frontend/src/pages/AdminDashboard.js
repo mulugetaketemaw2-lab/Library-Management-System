@@ -124,6 +124,7 @@ export default function AdminDashboard({ lang, setLang }) {
   const [resetModal, setResetModal] = useState(null);
   const [newPw, setNewPw] = useState("");
   const [editModal, setEditModal] = useState(null);
+  const [detailModal, setDetailModal] = useState(null);
   const [editForm, setEditForm] = useState({ firstName: "", fatherName: "", grandfatherName: "", username: "", email: "", address: "" });
   const [rules, setRules] = useState({ maxBorrowDays: 7, fineRate: 5 });
   const [showGlobalMenu, setShowGlobalMenu] = useState(false);
