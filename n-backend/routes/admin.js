@@ -31,15 +31,24 @@ router.get('/users', authMiddleware, librarianOnly, async (req, res) => {
 
 // POST create librarian (Admin Only)
 router.post('/librarian', authMiddleware, adminOnly, async (req, res) => {
-  const { name, username, password } = req.body;
+  const { name, username, password, email, address } = req.body;
   if (!name || !username || !password)
     return res.status(400).json({ message: 'All fields required' });
   try {
     const hash = await bcrypt.hash(password, 10);
-    await User.create({ name, username, password: hash, role: 'librarian', approved: true });
+    await User.create({ 
+      name, 
+      username, 
+      password: hash, 
+      role: 'librarian', 
+      email: email || '', 
+      address: address || '', 
+      approved: true 
+    });
     res.json({ message: 'Librarian created' });
   } catch (err) {
     if (err.code === 11000) return res.status(400).json({ message: 'Username already exists' });
+    console.error('Librarian Creation Error:', err);
     res.status(500).json({ message: 'Error creating librarian' });
   }
 });
