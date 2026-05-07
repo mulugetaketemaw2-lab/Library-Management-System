@@ -59,7 +59,7 @@ const t = {
   },
   am: {
     title: "የአድሚን ዳሽቦርድ",
-    librarians: "ላይብረሪያኖች",
+    librarians: "አስጠቃሚዎች",
     members: "አባላት",
     pending: "ማጽደቅ የሚጠብቁ",
     name: "ስም",
@@ -72,7 +72,7 @@ const t = {
     delete: "የተመረጡትን ሰርዝ",
     edit: "የተመረጠውን አርም",
     resetPw: "ፓስዎርድ ቀይር",
-    addLibrarian: "ላይብረሪያን ጨምር",
+    addLibrarian: "አስጠቃሚ ጨምር",
     addMember: "አባል ጨምር",
     fullName: "ሙሉ ስም",
     firstName: "ስም",

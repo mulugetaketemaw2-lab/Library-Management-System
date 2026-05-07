@@ -4,7 +4,7 @@ import API from "../api";
 
 const t = {
   en: { title:"Library System", subtitle:"Sign in to continue", username:"Username", password:"Password", role:"Role", admin:"Admin", manager:"Librarian", member:"Member", signin:"Sign In", signing:"Signing in...", noAccount:"Don't have an account?", register:"Register here", forgot: "Forgot Password?" },
-  am: { title:"የቤተ መጻሕፍት ሥርዓት", subtitle:"ለመቀጠል ይግቡ", username:"የተጠቃሚ ስም", password:"የይለፍ ቃል", role:"ሚና", admin:"አድሚን", manager:"Librarian", member:"አባል", signin:"ግባ", signing:"በመግባት ላይ...", noAccount:"መለያ የለዎትም?", register:"እዚህ ይመዝገቡ", forgot: "የይለፍ ቃል ረስተዋል?" },
+  am: { title:"የቤተ መጻሕፍት ሥርዓት", subtitle:"ለመቀጠል ይግቡ", username:"የተጠቃሚ ስም", password:"የይለፍ ቃል", role:"ሚና", admin:"አድሚን", manager:"አስጠቃሚ", member:"አባል", signin:"ግባ", signing:"በመግባት ላይ...", noAccount:"መለያ የለዎትም?", register:"እዚህ ይመዝገቡ", forgot: "የይለፍ ቃል ረስተዋል?" },
 };
 
 export default function Login({ onLogin, onSwitch, lang, setLang }) {
