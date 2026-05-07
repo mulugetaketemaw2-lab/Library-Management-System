@@ -509,7 +509,7 @@ export default function AdminDashboard({ lang, setLang }) {
               <h3 className="text-lg font-bold text-slate-900">📋 {T.librarians} ({librarians.length})</h3>
               <Toolbar role="librarian" isPending={false} />
             </div>
-            <UserTable list={librarians} showApproval={false} />
+            <UserTable list={librarians} showApproval={true} />
           </div>
         )}
 
@@ -529,7 +529,7 @@ export default function AdminDashboard({ lang, setLang }) {
                 <h3 className="text-lg font-bold text-emerald-700">👥 {T.members} ({approvedMembers.length})</h3>
                 <Toolbar role="member" isPending={false} />
               </div>
-              <UserTable list={approvedMembers} showApproval={false} />
+              <UserTable list={approvedMembers} showApproval={true} />
             </div>
           </div>
         )}
