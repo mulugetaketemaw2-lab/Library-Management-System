@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../api";
 
 const t = {
@@ -7,6 +8,7 @@ const t = {
 };
 
 export default function Login({ onLogin, onSwitch, lang, setLang }) {
+  const navigate = useNavigate();
   const [form,    setForm]    = useState({ username: "", password: "", role: "admin" });
   const [error,   setError]   = useState("");
   const [loading, setLoading] = useState(false);
@@ -171,7 +173,7 @@ export default function Login({ onLogin, onSwitch, lang, setLang }) {
                 </button>
               </p>
               <button 
-                onClick={() => window.location.href = "/forgot-password"}
+                onClick={() => navigate("/forgot-password")}
                 className="text-slate-400 hover:text-slate-600 text-xs font-bold transition-colors"
               >
                 {T.forgot}
@@ -180,7 +182,7 @@ export default function Login({ onLogin, onSwitch, lang, setLang }) {
 
             <div className="mt-8 pt-8 border-t border-slate-100">
               <button 
-                onClick={() => window.location.href = "/books"}
+                onClick={() => navigate("/books")}
                 className="w-full py-4 rounded-2xl bg-white border-2 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-500 text-sm font-black flex items-center justify-center gap-3 shadow-lg shadow-primary/20 animate-bounce hover:animate-none"
               >
                 {lang === "en" ? "Browse as Guest" : "እንደ እንግዳ ፈልግ"} <span className="text-xl group-hover:translate-x-1 transition-transform">👉</span>

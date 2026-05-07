@@ -226,33 +226,40 @@ const Layout = ({ children, lang, setLang }) => {
   );
 };
 
-function App() {
-  const [lang, setLang] = useState("en");
-
+function AppRoutes({ lang, setLang }) {
+  const navigate = useNavigate();
   const wrap = (el) => <Layout lang={lang} setLang={setLang}>{React.cloneElement(el, { lang, setLang })}</Layout>;
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login lang={lang} setLang={setLang} onLogin={() => window.location.href = "/"} onSwitch={() => window.location.href = "/register"} />} />
-        <Route path="/register" element={<Register lang={lang} setLang={setLang} onSwitch={() => window.location.href = "/login"} />} />
-        
-        <Route path="/forgot-password" element={<ForgotPassword lang={lang} onSwitch={() => window.location.href = "/login"} />} />
-        <Route path="/reset-password/:token" element={<ResetPassword lang={lang} />} />
+    <Routes>
+      <Route path="/login" element={<Login lang={lang} setLang={setLang} onLogin={() => navigate("/")} onSwitch={() => navigate("/register")} />} />
+      <Route path="/register" element={<Register lang={lang} setLang={setLang} onSwitch={() => navigate("/login")} />} />
+      
+      <Route path="/forgot-password" element={<ForgotPassword lang={lang} onSwitch={() => navigate("/login")} />} />
+      <Route path="/reset-password/:token" element={<ResetPassword lang={lang} />} />
 
-        {/* Public Route for Guests and Members */}
-        <Route path="/books" element={<Books lang={lang} setLang={setLang} />} />
-        <Route path="/books/:id" element={wrap(<BookDetail />)} />
-        
-        <Route path="/" element={wrap(<Dashboard />)} />
-        <Route path="/members" element={wrap(<Members />)} />
-        <Route path="/borrow" element={wrap(<Borrow />)} />
-        <Route path="/reports" element={wrap(<Reports />)} />
-        <Route path="/admin" element={wrap(<AdminDashboard />)} />
-        <Route path="/my-reservations" element={wrap(<MyReservations />)} />
-        <Route path="/loan-history" element={wrap(<LoanHistory />)} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+      {/* Public Route for Guests and Members */}
+      <Route path="/books" element={<Books lang={lang} setLang={setLang} />} />
+      <Route path="/books/:id" element={wrap(<BookDetail />)} />
+      
+      <Route path="/" element={wrap(<Dashboard />)} />
+      <Route path="/members" element={wrap(<Members />)} />
+      <Route path="/borrow" element={wrap(<Borrow />)} />
+      <Route path="/reports" element={wrap(<Reports />)} />
+      <Route path="/admin" element={wrap(<AdminDashboard />)} />
+      <Route path="/my-reservations" element={wrap(<MyReservations />)} />
+      <Route path="/loan-history" element={wrap(<LoanHistory />)} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  );
+}
+
+function App() {
+  const [lang, setLang] = useState("en");
+
+  return (
+    <BrowserRouter>
+      <AppRoutes lang={lang} setLang={setLang} />
     </BrowserRouter>
   );
 }
